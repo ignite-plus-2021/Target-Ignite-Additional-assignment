@@ -4,17 +4,12 @@ import java.util.List;
 
 import com.example.attempt.EmailValidator;
 import com.example.attempt.MobileValidator;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@RequestMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 class Controller {
 
     private final Repository repository;
@@ -36,8 +31,9 @@ class Controller {
     }
     // end::get-aggregate-root[]
 
-    @PostMapping("/employees")
-    Employee newEmployee(@Validated @RequestBody Employee newEmployee) {
+//    @PostMapping(value = "/employees", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/employees", method = {RequestMethod.GET, RequestMethod.POST}, consumes = {MediaType.ALL_VALUE})
+    Employee newEmployee(@RequestBody Employee newEmployee) {
         if (!emailValidator.test(newEmployee.getEmail())) {
             throw new ApiRequestException(newEmployee.getEmail() + " is not valid");
         }
@@ -50,7 +46,7 @@ class Controller {
 
     // Single item
 
-    @GetMapping("/employees/{id}")
+    @GetMapping(value = "/employees/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     Employee one(@PathVariable Long id) {
 
         return repository.findById(id)
