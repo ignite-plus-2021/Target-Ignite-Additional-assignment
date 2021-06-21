@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS Emp;
+CREATE TABLE Emp
+(
+    id   INT(11) NOT NULL,
+    name VARCHAR(50) NULL DEFAULT NULL,
+    email VARCHAR(50) NULL DEFAULT NULL,
+    mobile INT(11) NOT NULL,
+    company VARCHAR(50) NOT NULL,
+    PRIMARY KEY ('id')
+);
